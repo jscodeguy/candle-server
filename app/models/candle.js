@@ -1,14 +1,21 @@
 const mongoose = require('mongoose')
 
-const exampleSchema = new mongoose.Schema(
+const CandleScheme = new mongoose.Schema(
 	{
-		title: {
+		name: {
 			type: String,
 			required: true,
 		},
-		text: {
+		scent: {
 			type: String,
 			required: true,
+		},
+		brand: {
+			type: String,
+			required: true,
+		},
+		hoursOfBurn: {
+			type: Number,
 		},
 		owner: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -21,4 +28,4 @@ const exampleSchema = new mongoose.Schema(
 	}
 )
 
-module.exports = mongoose.model('Example', exampleSchema)
+module.exports = mongoose.model('Candle', CandleScheme)
