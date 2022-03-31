@@ -95,6 +95,21 @@ router.patch('/candles/:id', requireToken, removeBlanks, (req, res, next) => {
 		.catch(next)
 })
 
-
+// DESTROY
+// DELETE /candles/5a7db6c74d55bc51bdf39793
+router.delete('/candles/:id', requireToken, (req, res, next) => {
+	Candle.findById(req.params.id)
+		.then(handle404)
+		.then((candle) => {
+			// throw an error if current user doesn't own `candle`
+			requireOwnership(req, candle)
+			// delete the candle ONLY IF the above didn't throw
+			candle.deleteOne()
+		})
+		// send back 204 and no content if the deletion succeeded
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 module.exports = router
