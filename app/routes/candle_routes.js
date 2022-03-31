@@ -72,5 +72,29 @@ router.post('/candles', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+// UPDATE
+// PATCH /candles/5a7db6c74d55bc51bdf39793
+router.patch('/candles/:id', requireToken, removeBlanks, (req, res, next) => {
+	// if the client attempts to change the `owner` property by including a new
+	// owner, prevent that by deleting that key/value pair
+	delete req.body.candle.owner
+
+	Candle.findById(req.params.id)
+		.then(handle404)
+		.then((candle) => {
+			// pass the `req` object and the Mongoose record to `requireOwnership`
+			// it will throw an error if the current user isn't the owner
+			requireOwnership(req, candle)
+
+			// pass the result of Mongoose's `.update` to the next `.then`
+			return candle.updateOne(req.body.candle)
+		})
+		// if that succeeded, return 204 and no JSON
+		.then(() => res.sendStatus(204))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
+
+
 
 module.exports = router
