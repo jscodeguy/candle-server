@@ -43,6 +43,16 @@ router.get('/candles', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
-
+// SHOW
+// GET /candles/5a7db6c74d55bc51bdf39793
+router.get('/candles/:id', requireToken, (req, res, next) => {
+	// req.params.id will be set based on the `:id` in the route
+	Candle.findById(req.params.id)
+		.then(handle404)
+		// if `findById` is succesful, respond with 200 and "candle" JSON
+		.then((candle) => res.status(200).json({ candle: candle.toObject() }))
+		// if an error occurs, pass it to the handler
+		.catch(next)
+})
 
 module.exports = router
