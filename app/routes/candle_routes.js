@@ -55,4 +55,22 @@ router.get('/candles/:id', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+// CREATE
+// POST /candles
+router.post('/candles', requireToken, (req, res, next) => {
+	// set owner of new candle to be current user
+	req.body.candle.owner = req.user.id
+
+	Candle.create(req.body.candle)
+		// respond to succesful `create` with status 201 and JSON of new "candle"
+		.then((candle) => {
+			res.status(201).json({ candle: candle.toObject() })
+		})
+		// if an error occurs, pass it off to our error handler
+		// the error handler needs the error message and the `res` object so that it
+		// can send an error message back to the client
+		.catch(next)
+})
+
+
 module.exports = router
