@@ -29,7 +29,7 @@ const router = express.Router()
 
 // INDEX
 // GET /candles
-router.get('/candles', requireToken, (req, res, next) => {
+router.get('/candles',  (req, res, next) => {
 	Candle.find()
 		.then((candles) => {
 			// `candles` will be an array of Mongoose documents
@@ -45,7 +45,7 @@ router.get('/candles', requireToken, (req, res, next) => {
 
 // SHOW
 // GET /candles/5a7db6c74d55bc51bdf39793
-router.get('/candles/:id', requireToken, (req, res, next) => {
+router.get('/candles/:id',  (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Candle.findById(req.params.id)
 		.then(handle404)
@@ -74,7 +74,7 @@ router.post('/candles', requireToken, (req, res, next) => {
 
 // UPDATE
 // PATCH /candles/5a7db6c74d55bc51bdf39793
-router.patch('/candles/:id', requireToken, removeBlanks, (req, res, next) => {
+router.patch('/candles/:id', removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
 	delete req.body.candle.owner
